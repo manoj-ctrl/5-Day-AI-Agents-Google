@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigQuery Release Notes Tracker & Broadcaster</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Link to custom stylesheets -->
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar/Left Panel: App Info & Controls -->
+        <header class="app-sidebar">
+            <div class="brand-section">
+                <div class="logo-container">
+                    <i class="fa-solid fa-database logo-icon"></i>
+                    <div class="pulse-ring"></div>
+                </div>
+                <div>
+                    <h1>BigQuery Updates</h1>
+                    <p class="subtitle">Official Release Notes Tracker</p>
+                </div>
+            </div>
+            
+            <div class="control-card">
+                <div class="control-header">
+                    <span class="control-title"><i class="fa-solid fa-sliders"></i> Filters & Actions</span>
+                </div>
+                
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search update keyword..." autocomplete="off">
+                </div>
+                
+                <div class="actions-group">
+                    <button id="refreshBtn" class="btn btn-primary">
+                        <i class="fa-solid fa-rotate refresh-icon" id="spinner"></i>
+                        <span>Refresh Notes</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="stats-card">
+                <div class="stat-item">
+                    <span class="stat-label">Total Notes</span>
+                    <span class="stat-value" id="totalNotesCount">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Last Updated</span>
+                    <span class="stat-value" id="lastUpdatedTime">Never</span>
+                </div>
+            </div>
+            
+            <div class="footer-note">
+                <p>Data synced from standard <a href="https://docs.cloud.google.com/feeds/bigquery-release-notes.xml" target="_blank" rel="noopener">Google Cloud RSS Feed</a></p>
+            </div>
+        </header>
+
+        <!-- Main Content Panel: Feed Cards -->
+        <main class="feed-panel">
+            <div class="feed-header">
+                <h2>Release Notes Feed</h2>
+                <div class="feed-actions">
+                    <span class="selection-status" id="selectionStatus">No update selected</span>
+                    <button id="tweetSelectedBtn" class="btn btn-tweet" disabled>
+                        <i class="fa-brands fa-x-twitter"></i> Tweet Selected
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loader -->
+            <div id="loader" class="loader-container">
+                <div class="spinner-large"></div>
+                <p>Fetching latest release notes...</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="errorState" class="error-container hidden">
+                <i class="fa-solid fa-triangle-exclamation error-icon"></i>
+                <h3>Oops! Failed to fetch notes</h3>
+                <p id="errorMessage">Unable to fetch release notes from the server.</p>
+                <button id="retryBtn" class="btn btn-outline">Try Again</button>
+            </div>
+
+            <!-- Feed Items Container -->
+            <div id="feedContainer" class="feed-container"></div>
+        </main>
+    </div>
+
+    <!-- Twitter Composer Modal -->
+    <div id="tweetModal" class="modal-backdrop hidden">
+        <div class="modal-content glass">
+            <div class="modal-header">
+                <h3><i class="fa-brands fa-x-twitter"></i> Compose Tweet</h3>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">Share this BigQuery release note on X (formerly Twitter). You can edit the text before posting.</p>
+                
+                <div class="tweet-preview-box">
+                    <textarea id="tweetTextArea" maxlength="280" rows="6"></textarea>
+                    <div class="char-count-row">
+                        <span id="charCount">0 / 280</span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelTweetBtn">Cancel</button>
+                <button class="btn btn-tweet" id="postTweetBtn">
+                    <i class="fa-brands fa-x-twitter"></i> Tweet Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS Scripts -->
+    <script src="/static/script.js"></script>
+</body>
+</html>
